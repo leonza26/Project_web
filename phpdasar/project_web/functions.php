@@ -156,5 +156,54 @@ function upload(){
 
 }
 
+function registrasi($data){
+    global $conn;
+
+    // strtolower mengubah string menjadi huruf kecil
+    // stripslashes agar simbolslashes tidak diinputkan
+    $username = strtolower(stripslashes($data["username"]));
+    $email = strtolower($data["email"]);
+    // agar password di tb_users ada petik dua pemisah password
+    $password = mysqli_real_escape_string($conn, $data["password1"]);
+    $password2 = mysqli_real_escape_string($conn, $data["password2"]);
+
+
+    // cek apakah username sudah ada sebelumnya apa belum 
+    $result = mysqli_query($conn, "SELECT username FROM tb_users WHERE username = '$username'");
+
+    if(mysqli_fetch_assoc($result)){
+        echo "
+        <script>
+            alert('username sudah ada');
+
+        </script>
+        ";
+
+        return false;
+    }
+
+
+    // cek apakah password dan konfirmasi password sesuai 
+    if($password !== $password2){
+        echo "
+        <script>
+            alert('konfirmasi password tidak sesuai!');
+        </script>";
+        return false;
+    }
+
+    // enkripsi password
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    // tambahkan user baru ke database
+
+    mysqli_query($conn, "INSERT INTO tb_users VALUES('', '$username', '$email', '$password')");
+
+    return mysqli_affected_rows($conn);
+
+}
+
+
+
 
 ?>
