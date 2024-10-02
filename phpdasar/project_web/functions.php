@@ -159,6 +159,7 @@ function upload(){
 function registrasi($data){
     global $conn;
 
+    // mengambil data dari inputan form
     // strtolower mengubah string menjadi huruf kecil
     // stripslashes agar simbolslashes tidak diinputkan
     $username = strtolower(stripslashes($data["username"]));

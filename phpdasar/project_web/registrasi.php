@@ -10,7 +10,6 @@ if ( isset($_POST["register"])){
     echo "
       <script>
         alert('User Baru Berhasil Ditambahkan!');
-        document.location.href = 'index.php';
       </script>
     ";
  } else {
@@ -39,11 +38,11 @@ if ( isset($_POST["register"])){
   <form action="" method="POST">
   <div class="mb-3">
     <label for="exampleInputUsername" class="form-label">Username</label>
-    <input type="text" class="form-control border border-primary" id="exampleInputUsername" name="username" placeholder="example@gmail.com" require>
+    <input type="text" class="form-control border border-primary" id="exampleInputUsername" name="username" placeholder="akunku123" require>
   </div>
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control border border-primary" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="akunku123" require>
+    <input type="email" class="form-control border border-primary" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="example@gmail.com" require>
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Password</label>
