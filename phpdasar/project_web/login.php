@@ -25,6 +25,8 @@ if ( isset($_POST["login"])){
         }
     }
 
+    $error = true;
+
 
 }
 
@@ -45,6 +47,11 @@ if ( isset($_POST["login"])){
 <div class="card container mt-5 border border-primary" style="width: 40rem;">
   <div class="card-body">
   <h2 class="card-title text-center mb-3">Login</h2>
+
+  <?php if(isset($error)) : ?>
+    <p style="color: red; font-style: italic">username atau password salah!</p>
+    <?php endif; ?>
+
   <form action="" method="POST">
   <div class="mb-3">
     <label for="exampleInputUsername" class="form-label">Username</label>
