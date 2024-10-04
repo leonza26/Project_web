@@ -1,5 +1,7 @@
 <?php
 
+
+
 // koneksi ke mySQL
 
 $conn = mysqli_connect("localhost", "root", "", "db_smartphone");

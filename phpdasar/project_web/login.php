@@ -1,4 +1,12 @@
 <?php 
+session_start();
+
+// mengembalikan user ke halaman index jika ingin masuk halaman login
+if(isset($_SESSION["login"])){
+    header('Location: index.php');
+    exit;
+}
+
 
 require 'functions.php';
 
@@ -20,6 +28,9 @@ if ( isset($_POST["login"])){
         $row = mysqli_fetch_assoc($result);
 
         if( password_verify($password, $row["password"]) ){
+
+            // membuat session agar login dulu baru bisa masuk ke halaman lainnya
+            $_SESSION["login"] = true;
             header("Location: index.php");
             exit;
         }

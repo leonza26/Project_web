@@ -1,4 +1,11 @@
 <?php 
+session_start();
+
+// mengembalikan user ke halaman login agar bisa masuk ke halaman index
+if(!isset($_SESSION["login"])){
+    header('Location: login.php');
+    exit;
+}
 
 require "functions.php";
 
@@ -25,6 +32,7 @@ if ( isset($_POST["cari"])){
 
 <div class="container-fluid d-flex justify-content-between align-items-center">
   <a class="btn btn-primary mx-3 mt-2" href="tambah.php" role="button">Tambah data</a>
+
       <br>
 
   <form class="d-flex mt-2 mx" role="search" action="" method="POST">
@@ -32,6 +40,7 @@ if ( isset($_POST["cari"])){
       <button class="btn btn-outline-primary" type="submit" name="cari">Search</button>
     </form>
 </div>
+<a class="btn btn-danger mx-4 mt-3 " href="logout.php" role="button">Logout</a>
 
 <table  class="table table-hover border-3 mx-2 mt-5" >
   <thead>
