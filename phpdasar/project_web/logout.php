@@ -5,6 +5,12 @@
     // untuk mengakhiri session
     session_destroy();
 
-    header('Location: login.php')
+    // mengakhiri cookie
+    // nama cookie, nilai kosong, waktu - 3600
+    setcookie('id', '', time() - 3600);
+    setcookie('key', '', time() - 3600);
+
+    header('Location: login.php');
+    exit;
 
 ?>

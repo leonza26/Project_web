@@ -1,5 +1,24 @@
 <?php 
 session_start();
+require 'functions.php';
+
+
+// cek cookie
+if( isset($_COOKIE['id']) && isset($_COOKIE['key'])){
+  $id = $_COOKIE["id"];
+  $key = $_COOKIE["key"];
+
+  // ambil cookie berdasarkan username
+  $result = mysqli_query($conn, "SELECT * FROM tb_users WHERE id = $id");
+  $row = mysqli_fetch_assoc($result);
+
+  // cek cookie dan username 
+  if ( $key === hash('sha256', $row["username"])){
+    $_SESSION["login"] = true;
+  }
+
+
+}
 
 // mengembalikan user ke halaman index jika ingin masuk halaman login
 if(isset($_SESSION["login"])){
@@ -8,7 +27,7 @@ if(isset($_SESSION["login"])){
 }
 
 
-require 'functions.php';
+
 
 
 // cek apakah data berhasil masuk setelah login di tekan
@@ -29,8 +48,20 @@ if ( isset($_POST["login"])){
 
         if( password_verify($password, $row["password"]) ){
 
-            // membuat session agar login dulu baru bisa masuk ke halaman lainnya
+            // membuat session agar login dulu baru bisa masuk ke halaman lainnya dan hanya satu sesi
             $_SESSION["login"] = true;
+
+            // membuat cookie agar kita saat close chrome kita masih bisa login ke server kita
+
+            if (isset($_POST["remember"])){
+              // membuat cookie menggunakan funtions setcookie dan menggunakan id dan username agar tidak bisa dibaca oleh user yang lain untuk melakukan login
+              // setcookie(namacookie, nilai,waktu cookie);
+              setcookie('id', $row['id'], time() +60);
+              setcookie('key', hash('sha256', $row["username"]));
+
+            }
+
+
             header("Location: index.php");
             exit;
         }
@@ -75,6 +106,11 @@ if ( isset($_POST["login"])){
   <div class="">
     <label class="form-label">Belum Punya Akun? <a href="registrasi.php">Register Sekarang</a> </label>
   </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" name="remember" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Remember Me </label>
+  </div>
+
   <button type="submit" name="login" class="btn btn-primary">Login</button>
 </form>
 
