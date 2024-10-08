@@ -8,8 +8,23 @@ if(!isset($_SESSION["login"])){
 }
 
 require "functions.php";
+ 
+// membuat konfigurasi pagination 
 
-$rekap = query("SELECT * FROM tb_smarphone");
+$jumlah_data_perhalaman = 5;
+// fungsi count() agar menghitung jumlah array asossiatif
+$jumlah_data = count(query("SELECT * FROM tb_users"));
+// fungsi ceil agar membulatkan nilai ke atas
+$jumlahhalaman = ceil($jumlah_data / $jumlah_data_perhalaman);
+// memakai ternary operator
+$halamanAktif = ( isset($_GET["page"]) ) ? $_GET["page"] : 1;
+$awaldata = ( $jumlah_data_perhalaman / $halamanAktif) - $jumlah_data_perhalaman;
+
+
+// menampilakn seluruh data di database
+$rekap = query("SELECT * FROM tb_smarphone LIMIT $awaldata, $jumlah_data_perhalaman");
+
+
 
 // Membuat logika pencarian dan menimpa variabel $rekap
 
@@ -82,11 +97,27 @@ if ( isset($_POST["cari"])){
     </tr>
     <?php $i++ ?>
   <?php endforeach; ?>
-  
 
   </tbody>
 </table>
 
+  <div class="text-center mt-3">
+    <nav aria-label="...">
+      <ul class="pagination">
+        <li class="page-item disabled">
+          <a class="page-link">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item active" aria-current="page">
+          <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
