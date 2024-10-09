@@ -11,17 +11,17 @@ require "functions.php";
  
 // membuat konfigurasi pagination 
 
-$jumlah_data_perhalaman = 5;
+$jumlah_data_perhalaman = 2;
 // fungsi count() agar menghitung jumlah array asossiatif
-$jumlah_data = count(query("SELECT * FROM tb_users"));
+$jumlah_data = count(query("SELECT * FROM tb_smarphone"));
 // fungsi ceil agar membulatkan nilai ke atas
 $jumlahhalaman = ceil($jumlah_data / $jumlah_data_perhalaman);
 // memakai ternary operator
 $halamanAktif = ( isset($_GET["page"]) ) ? $_GET["page"] : 1;
-$awaldata = ( $jumlah_data_perhalaman / $halamanAktif) - $jumlah_data_perhalaman;
+$awaldata = ( $jumlah_data_perhalaman * $halamanAktif) - $jumlah_data_perhalaman;
 
 
-// menampilakn seluruh data di database
+// menampilakn seluruh data di database setelah di pagination
 $rekap = query("SELECT * FROM tb_smarphone LIMIT $awaldata, $jumlah_data_perhalaman");
 
 
@@ -40,6 +40,12 @@ if ( isset($_POST["cari"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halaman Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+      .pagination {
+        justify-content: center;
+      }
+    </style>
+
 </head>
 <body>
 
@@ -101,23 +107,34 @@ if ( isset($_POST["cari"])){
   </tbody>
 </table>
 
-  <div class="text-center mt-3">
+    <!-- pagination -->
     <nav aria-label="...">
       <ul class="pagination">
-        <li class="page-item disabled">
-          <a class="page-link">Previous</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item active" aria-current="page">
-          <a class="page-link" href="#">2</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
+
+      <?php if($halamanAktif > 1) : ?>
         <li class="page-item">
-          <a class="page-link" href="#">Next</a>
+          <a class="page-link" href="?page=<?= $halamanAktif - 1; ?>">Previous</a>
+        </li> 
+        <?php endif; ?>
+
+        <?php for( $i = 1; $i<= $jumlahhalaman; $i++) : ?>
+          <?php if($i == $halamanAktif ) : ?>
+            <li class="page-item active" aria-current="page">
+          <a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a>
         </li>
+          <?php else : ?>
+        <a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a>
+          <?php endif; ?>
+        <?php endfor; ?>
+
+        <?php if($halamanAktif < $jumlahhalaman) : ?>
+        <li class="page-item">
+          <a class="page-link" href="?page=<?= $halamanAktif + 1; ?>">Next</a>
+        </li> 
+        <?php endif; ?>
+
       </ul>
     </nav>
-  </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
