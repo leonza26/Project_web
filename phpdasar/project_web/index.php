@@ -13,7 +13,7 @@ require "functions.php";
 
 $jumlah_data_perhalaman = 2;
 // fungsi count() agar menghitung jumlah array asossiatif
-$jumlah_data = count(query("SELECT * FROM tb_smarphone"));
+$jumlah_data = count(query("SELECT * FROM tb_smarphone")); 
 // fungsi ceil agar membulatkan nilai ke atas
 $jumlahhalaman = ceil($jumlah_data / $jumlah_data_perhalaman);
 // memakai ternary operator
