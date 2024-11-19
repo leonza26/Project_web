@@ -4,25 +4,25 @@ session_start();
 // mengembalikan user ke halaman login agar bisa masuk ke halaman index
 if(!isset($_SESSION["login"])){
     header('Location: login.php');
-    exit;
+    exit; 
 }
 
 require "functions.php";
  
-// membuat konfigurasi pagination 
+// // membuat konfigurasi pagination 
 
-$jumlah_data_perhalaman = 2;
-// fungsi count() agar menghitung jumlah array asossiatif
-$jumlah_data = count(query("SELECT * FROM tb_smarphone")); 
-// fungsi ceil agar membulatkan nilai ke atas
-$jumlahhalaman = ceil($jumlah_data / $jumlah_data_perhalaman);
-// memakai ternary operator
-$halamanAktif = ( isset($_GET["page"]) ) ? $_GET["page"] : 1;
-$awaldata = ( $jumlah_data_perhalaman * $halamanAktif) - $jumlah_data_perhalaman;
+// $jumlah_data_perhalaman = 5;
+// // fungsi count() agar menghitung jumlah array asossiatif
+// $jumlah_data = count(query("SELECT * FROM tb_smarphone")); //15
+// // fungsi ceil agar membulatkan nilai ke atas
+// $jumlahhalaman = ceil($jumlah_data / $jumlah_data_perhalaman); 
+// // memakai ternary operator
+// $halamanAktif = ( isset($_GET["page"]) ) ? $_GET["page"] : 1;
+// $awaldata = ( $jumlah_data_perhalaman * $halamanAktif) - $jumlah_data_perhalaman;
 
 
 // menampilakn seluruh data di database setelah di pagination
-$rekap = query("SELECT * FROM tb_smarphone LIMIT $awaldata, $jumlah_data_perhalaman");
+$rekap = query("SELECT * FROM tb_smarphone");
 
 
 
@@ -36,15 +36,12 @@ if ( isset($_POST["cari"])){
 
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halaman Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-      .pagination {
-        justify-content: center;
-      }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
 <body>
@@ -53,15 +50,23 @@ if ( isset($_POST["cari"])){
 
 <div class="container-fluid d-flex justify-content-between align-items-center">
   <a class="btn btn-primary mx-3 mt-2" href="tambah.php" role="button">Tambah data</a>
-
       <br>
 
   <form class="d-flex mt-2 mx" role="search" action="" method="POST">
-      <input class="form-control me-2" type="search" name="keyword" placeholder="Search" aria-label="Search" autocomplete="off">
-      <button class="btn btn-outline-primary" type="submit" name="cari">Search</button>
+      <input class="form-control me-2" type="search" name="keyword" id="keyword" placeholder="Search" aria-label="Search" autocomplete="off">
+      <!-- <button class="btn btn-outline-primary" type="submit" name="cari" id="pencarian">Search</button> -->
+       <img src="img/loader.gif" class="loader">
+       
     </form>
 </div>
+
 <a class="btn btn-danger mx-4 mt-3 " href="logout.php" role="button">Logout</a>
+
+<a href="cetak.php" target="_blank"><button type="button" class="btn btn-success mt-3 mr-2" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer-fill" viewBox="0 0 16 16">
+<path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1"/>
+<path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/></svg> Cetak</button></a>
+
+<div id="container">
 
 <table  class="table table-hover border-3 mx-2 mt-5" >
   <thead>
@@ -78,7 +83,6 @@ if ( isset($_POST["cari"])){
     </tr>
   </thead>
   <tbody>
-
   <?php $i = 1 ?>
   <?php foreach($rekap  as $rekapan) : ?>
     <tr>
@@ -88,7 +92,7 @@ if ( isset($_POST["cari"])){
       <td><?= $rekapan["versi"] ?></td>
       <td><?= $rekapan["os"] ?></td>
       <td>
-        <img src="img/<?= $rekapan["gambar"] ?>" alt="infinix" width="100">
+        <img src="img/<?= $rekapan["gambar"] ?>" alt="Gambar" width="100">
     </td>
       <td>
             <a href="ubah.php?id= <?= $rekapan["id"] ?>"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -106,36 +110,11 @@ if ( isset($_POST["cari"])){
 
   </tbody>
 </table>
+</div>
 
-    <!-- pagination -->
-    <nav aria-label="...">
-      <ul class="pagination">
-
-      <?php if($halamanAktif > 1) : ?>
-        <li class="page-item">
-          <a class="page-link" href="?page=<?= $halamanAktif - 1; ?>">Previous</a>
-        </li> 
-        <?php endif; ?>
-
-        <?php for( $i = 1; $i<= $jumlahhalaman; $i++) : ?>
-          <?php if($i == $halamanAktif ) : ?>
-            <li class="page-item active" aria-current="page">
-          <a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a>
-        </li>
-          <?php else : ?>
-        <a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a>
-          <?php endif; ?>
-        <?php endfor; ?>
-
-        <?php if($halamanAktif < $jumlahhalaman) : ?>
-        <li class="page-item">
-          <a class="page-link" href="?page=<?= $halamanAktif + 1; ?>">Next</a>
-        </li> 
-        <?php endif; ?>
-
-      </ul>
-    </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="js/jquery-3.7.1.js"></script>
+<script src="js/script.js"></script>
 </body>
 </html>

@@ -54,9 +54,11 @@ if( isset($_POST["submit"])){
 <h1 class="mb-5 mt-3 text-center">Ubah Data Penjualan</h1>
 
 <form class="container mt-3" action="" method="POST" enctype="multipart/form-data">
+  
   <input type="hidden" name="id" value="<?= $smartphone["id"]; ?>">
   <input type="hidden" name="gambarLama" value="<?= $smartphone["gambar"]; ?>">
-    <div class="mb-3">
+
+    <div class="mb-3"> 
       <label for="disabledTextInput" class="form-label">Merek</label>
       <input type="text" id="disabledTextInput" name="merek" class="form-control" required
       value="<?= $smartphone["merek"]?>">

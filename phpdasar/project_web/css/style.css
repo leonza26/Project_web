@@ -1,0 +1,20 @@
+.pagination {
+    justify-content: center;
+}
+
+.loader {
+    width: 35px;
+    position: absolute;
+    right: 235px;
+    top: 83px;
+    display: none;
+}
+
+tr:nth-child(even){
+    background-color: aquamarine;
+}
+
+.tabrow {
+    margin: 0 auto;
+}
+

@@ -1,5 +1,7 @@
 <?php 
+sleep(1);
 session_start();
+
 require 'functions.php';
 
 
